@@ -12,6 +12,10 @@ tareas:
 - Se habilita el uso de Carbon.
   - npm install @carbon/react
   - npm install sass
+- Se avanzan en la contrucción de la interfaz gráfica.
+  - https://carbondesignsystem.com/components/overview
+  - https://react.carbondesignsystem.com/?path=/docs/getting-started-welcome--welcome
+  - https://github.com/carbon-design-system/carbon-tutorial/tree/v11-react-step-5
 
 comandos:
 

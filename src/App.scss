@@ -1,42 +1,108 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@use "@carbon/layout";
+
+//text
+
+.textSubheading {
+  color: #000;
+
+  /* Sub-heading/sub heading */
+  font-family: IBM Plex Sans;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.textCuerpoTextoGrande {
+  color: #000;
+
+  /* Cuerpo de texto/cuerpo de texto grande */
+  font-family: IBM Plex Sans;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 30px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.textCuerpoTextoMedio {
+  color: var(--text-text-primary, #161616);
+
+  /* Cuerpo de texto/cuerpo de texto medio */
+  font-family: IBM Plex Sans;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.textCuerpoTextoPequeño {
+  color: #000;
+
+  /* Cuerpo de texto/cuerpo de texto pequeño */
+  font-family: IBM Plex Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.16px;
 }
 
-.card {
-  padding: 2em;
+.textAyuda {
+  color: var(--text-text-primary, #161616);
+
+  /* Otros estilos/texto ayuda 1 */
+  font-family: IBM Plex Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.32px;
 }
 
-.read-the-docs {
-  color: #888;
+//spacing
+
+.spacing-01 {
+  //2px
+  margin-bottom: layout.$spacing-01;
+}
+.spacing-02 {
+  //4px
+  margin-bottom: layout.$spacing-02;
+}
+.spacing-03 {
+  //8px
+  margin-bottom: layout.$spacing-03;
+}
+.spacing-04 {
+  //12px
+  margin-bottom: layout.$spacing-04;
+}
+.spacing-05 {
+  //16px
+  margin-bottom: layout.$spacing-05;
+}
+.spacing-06 {
+  //24px
+  margin-bottom: layout.$spacing-06;
+}
+.spacing-07 {
+  //32px
+  margin-bottom: layout.$spacing-07;
+}
+.spacing-08 {
+  //40px
+  margin-bottom: layout.$spacing-08;
+}
+
+//specific
+
+.mainGrid {
+  width: 100vw;
+  height: 100vh;
+}
+
+.practica {
+  border: 0.5px solid #d6d6d6;
+  background: #fff;
+  padding: 8px;
 }
