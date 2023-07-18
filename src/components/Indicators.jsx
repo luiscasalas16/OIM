@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Dropdown, RadioButtonGroup, RadioButton } from "@carbon/react";
 
-export const Indicators = ({ countries, onCountrySelect }) => {
+export const Indicators = ({ countries, onCountrySelect, id }) => {
+  const [currentItem, setCurrentItem] = useState(null);
+
   const items = [
     {
       id: "option-0",
@@ -20,6 +23,12 @@ export const Indicators = ({ countries, onCountrySelect }) => {
     },
   ];
 
+  if (id != null && (currentItem == null || (currentItem != null && id != currentItem.id))) {
+    var country = countries.find((country) => id == country.id);
+
+    setCurrentItem(country);
+  }
+
   return (
     <>
       <p className="textCuerpoTextoGrande">Panel de indicadores</p>
@@ -29,7 +38,11 @@ export const Indicators = ({ countries, onCountrySelect }) => {
         titleText="País"
         items={countries}
         itemToString={(item) => (item ? item.name : "")}
-        onChange={({ selectedItem }) => onCountrySelect(selectedItem)}
+        onChange={({ selectedItem }) => {
+          setCurrentItem(selectedItem);
+          onCountrySelect(selectedItem);
+        }}
+        selectedItem={currentItem}
       />
       <Dropdown id="selectScope" label="Seleccione una opción" titleText="Ámbito geográfico" items={items} itemToString={(item) => (item ? item.text : "")} />
       <Dropdown

@@ -6,12 +6,17 @@ import colors from "../helpers/colors";
 import mapTopoData from "../assets/maps/countries-50m.json";
 
 export const Map = ({ countries, onCountrySelect, id }) => {
-  const countriesIdToRsmKey = useRef(null);
   const countriesIds = useRef(null);
 
-  const [position, setPosition] = useState({ coordinates: [-95, 35], zoom: 2.5 });
+  const countriesIdToGeography = useRef(null);
+  const mapProjection = useRef(null);
+  const mapPath = useRef(null);
+
   const [currentId, setCurrentId] = useState(id);
   const [currentRsmKey, setCurrentRsmKey] = useState("");
+
+  const [zoom, setZoom] = useState(2.5);
+  const [center, setCenter] = useState([-95, 35]);
 
   //genera un conjunto que contiene el id de los paises disponibles.
   var t1 = new Set();
@@ -20,48 +25,62 @@ export const Map = ({ countries, onCountrySelect, id }) => {
   }
   countriesIds.current = t1;
 
-  console.log(countriesIds.current);
-
   if (id != null && id != currentId) {
-    setCurrentId(id);
-    setCurrentRsmKey(countriesIdToRsmKey.current[id]);
+    const geography = countriesIdToGeography.current[id];
+
+    setCurrentId(geography.id);
+    setCurrentRsmKey(geography.rsmKey);
+
+    const centroid = mapProjection.current.invert(mapPath.current.centroid(geography));
+    setCenter(centroid);
+    setZoom(5);
   }
 
   function handleMoveEnd(position) {
-    setPosition(position);
+    setZoom(position.zoom);
+    setCenter(position.coordinates);
   }
 
-  const handleClick = (geo) => () => {
-    setCurrentId(geo.id);
-    setCurrentRsmKey(geo.rsmKey);
+  const handleClick = (geography, projection, path) => () => {
+    setCurrentId(geography.id);
+    setCurrentRsmKey(geography.rsmKey);
 
-    onCountrySelect(geo.id);
+    const centroid = projection.invert(path.centroid(geography));
+    setCenter(centroid);
+    setZoom(5);
+
+    onCountrySelect(geography.id);
   };
 
   return (
     <>
       <ComposableMap>
-        <ZoomableGroup zoom={position.zoom} center={position.coordinates} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
+        <ZoomableGroup center={center} zoom={zoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
           <Graticule stroke={colors.graticule} strokeWidth={0.4} />
           <Geographies geography={mapTopoData}>
-            {({ geographies }) => {
+            {({ geographies, projection, path }) => {
               //genera un objeto que mapea el id con el rsmKey de un pais, ya que sólo el Map conoce el rsmKey y el Indicators conoce el id del pais.
               var t2 = {};
               for (var i = 0; i < geographies.length; i++) {
-                if (geographies[i].id) t2[new String(geographies[i].id)] = geographies[i].rsmKey;
+                if (geographies[i].id) t2[new String(geographies[i].id)] = geographies[i];
               }
-              countriesIdToRsmKey.current = t2;
+              countriesIdToGeography.current = t2;
 
-              return geographies.map((geo) => (
+              mapProjection.current = projection;
+              mapPath.current = path;
+
+              //
+
+              return geographies.map((geography) => (
                 <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
+                  key={geography.rsmKey}
+                  geography={geography}
                   style={{
                     default: {
                       fill:
-                        geo.rsmKey == currentRsmKey
+                        geography.rsmKey == currentRsmKey
                           ? colors.countryActual
-                          : countriesIds.current.has(geo.id)
+                          : countriesIds.current.has(geography.id)
                           ? colors.countryFillEnable
                           : colors.countryFillDisable,
                     },
@@ -74,7 +93,7 @@ export const Map = ({ countries, onCountrySelect, id }) => {
                   }}
                   stroke={colors.line}
                   strokeWidth={0.2}
-                  onClick={handleClick(geo)}
+                  onClick={handleClick(geography, projection, path)}
                 />
               ));
             }}

@@ -6,7 +6,8 @@ export const Practices = ({ name, population, capital }) => {
     <>
       <p className="textCuerpoTextoGrande spacing-06">{name ?? "N/A"}</p>
       <p className="textCuerpoTextoPequeño spacing-05">
-        Costa Rica es un país de América Central con una geografía accidentada, que incluye bosques tropicales y costas en el Caribe y el Pacífico.
+        Lorem ipsum dolor sit lorem a amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam.
       </p>
       <p className="textCuerpoTextoPequeño spacing-07">
         <strong>Población:</strong> {population ?? "N/A"}

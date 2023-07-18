@@ -1,15 +1,23 @@
 import "./App.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Column } from "@carbon/react";
 
 import { Indicators, Map, Practices } from "./components";
 
 import { getCountries } from "./helpers/countries";
 
-var data = await getCountries();
-
 function App() {
-  const [countries, setCountries] = useState(data);
+  const [countries, setCountries] = useState([]);
+
+  const initCountries = async () => {
+    const t = await getCountries();
+    setCountries(t);
+  };
+
+  useEffect(() => {
+    initCountries();
+  }, []);
+
   const [currentCountry, setCurrentCountry] = useState(null);
 
   const onMapCountrySelect = (id) => {
@@ -24,7 +32,7 @@ function App() {
   return (
     <Grid className="mainGrid">
       <Column lg={3} md={2} sm={4}>
-        <Indicators countries={countries} onCountrySelect={onIndicatorsCountrySelect}></Indicators>
+        <Indicators countries={countries} id={currentCountry?.id ?? null} onCountrySelect={onIndicatorsCountrySelect}></Indicators>
       </Column>
       <Column lg={9} md={6} sm={4}>
         <Map countries={countries} id={currentCountry?.id ?? null} onCountrySelect={onMapCountrySelect}></Map>
