@@ -22,7 +22,9 @@ tareas:
     - https://www.react-simple-maps.io/docs/getting-started
     - https://github.com/topojson/world-atlas
 - Se habilita el uso de datos con API público.
-  - https://restcountries.com/
+  - https://restcountries.com
+- Se habilita el uso del tooltip.
+  - https://www.react-simple-maps.io/examples/map-chart-with-tooltip
 - Se avanzan en la contrucción de la interfaz gráfica.
 
 notas:
