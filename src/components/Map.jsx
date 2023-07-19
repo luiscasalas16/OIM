@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
+
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Graticule } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
 
 import colors from "../helpers/colors";
 
@@ -14,11 +16,10 @@ export const Map = ({ countries, onSelectCountry, id }) => {
 
   const [currentId, setCurrentId] = useState(id);
   const [currentRsmKey, setCurrentRsmKey] = useState("");
-
   const [zoom, setZoom] = useState(2.5);
   const [center, setCenter] = useState([-95, 35]);
 
-  console.log(countries);
+  const [content, setContent] = useState("hola mundo");
 
   if (countries.length > 0 && countriesIds.current == null) {
     //genera un conjunto que contiene el id de los paises disponibles.
@@ -55,52 +56,61 @@ export const Map = ({ countries, onSelectCountry, id }) => {
 
   return (
     <>
-      <ComposableMap>
-        <ZoomableGroup center={center} zoom={zoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
-          <Graticule stroke={colors.graticule} strokeWidth={0.4} />
-          <Geographies geography={mapTopoData}>
-            {({ geographies, projection, path }) => {
-              if (mapIdToGeography.current == null) {
-                //genera un objeto que mapea el id con el rsmKey de un pais, ya que sólo el Map conoce el rsmKey y el Indicators conoce el id del pais.
-                var t2 = {};
-                for (var i = 0; i < geographies.length; i++) {
-                  if (geographies[i].id) t2[new String(geographies[i].id)] = geographies[i];
+      <div data-tip="">
+        <ComposableMap>
+          <ZoomableGroup center={center} zoom={zoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
+            <Graticule stroke={colors.graticule} strokeWidth={0.4} />
+            <Geographies geography={mapTopoData}>
+              {({ geographies, projection, path }) => {
+                if (mapIdToGeography.current == null) {
+                  //genera un objeto que mapea el id con el rsmKey de un pais, ya que sólo el Map conoce el rsmKey y el Indicators conoce el id del pais.
+                  var t2 = {};
+                  for (var i = 0; i < geographies.length; i++) {
+                    if (geographies[i].id) t2[new String(geographies[i].id)] = geographies[i];
+                  }
+                  mapIdToGeography.current = t2;
                 }
-                mapIdToGeography.current = t2;
-              }
-              // almacena referencias necesarias para hacer el zoom
-              mapProjection.current = projection;
-              mapPath.current = path;
+                // almacena referencias necesarias para hacer el zoom
+                mapProjection.current = projection;
+                mapPath.current = path;
 
-              return geographies.map((geography) => (
-                <Geography
-                  key={geography.rsmKey}
-                  geography={geography}
-                  style={{
-                    default: {
-                      fill:
-                        geography.rsmKey == currentRsmKey
-                          ? colors.countryActual
-                          : countriesIds.current && countriesIds.current.has(geography.id)
-                          ? colors.countryFillEnable
-                          : colors.countryFillDisable,
-                    },
-                    hover: {
-                      fill: colors.countryHover,
-                    },
-                    pressed: {
-                      fill: colors.countryPress,
-                    },
-                  }}
-                  stroke={colors.line}
-                  strokeWidth={0.2}
-                  onClick={handleClick(geography, projection, path)}
-                />
-              ));
-            }}
-          </Geographies>
-        </ZoomableGroup>
-      </ComposableMap>
+                return geographies.map((geography) => (
+                  <Geography
+                    key={geography.rsmKey}
+                    geography={geography}
+                    style={{
+                      default: {
+                        fill:
+                          geography.rsmKey == currentRsmKey
+                            ? colors.countryActual
+                            : countriesIds.current && countriesIds.current.has(geography.id)
+                            ? colors.countryFillEnable
+                            : colors.countryFillDisable,
+                      },
+                      hover: {
+                        fill: colors.countryHover,
+                      },
+                      pressed: {
+                        fill: colors.countryPress,
+                      },
+                    }}
+                    stroke={colors.line}
+                    strokeWidth={0.2}
+                    onClick={handleClick(geography, projection, path)}
+                    onMouseEnter={() => {
+                      setContent(`${geography.properties.name}`);
+                    }}
+                    onMouseLeave={() => {
+                      setContent("");
+                    }}
+                  />
+                ));
+              }}
+            </Geographies>
+          </ZoomableGroup>
+        </ComposableMap>
+      </div>
+      <ReactTooltip>{content}</ReactTooltip>
     </>
   );
 };

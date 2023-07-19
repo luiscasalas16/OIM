@@ -110,3 +110,7 @@
 .rsm-geographies path:focus {
   outline: none;
 }
+
+.__react_component_tooltip.place-top::before {
+  z-index: -2 !important;
+}
