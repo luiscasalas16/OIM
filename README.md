@@ -21,7 +21,7 @@ tareas:
   - referencias
     - https://www.react-simple-maps.io/docs/getting-started
     - https://github.com/topojson/world-atlas
-- Se habilita el uso de datos con API publico.
+- Se habilita el uso de datos con API público.
   - https://restcountries.com/
 - Se avanzan en la contrucción de la interfaz gráfica.
 

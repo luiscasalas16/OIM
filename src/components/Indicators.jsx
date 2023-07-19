@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dropdown, RadioButtonGroup, RadioButton } from "@carbon/react";
 
-export const Indicators = ({ countries, onCountrySelect, id }) => {
+export const Indicators = ({ countries, onSelectCountry, id }) => {
   const [currentItem, setCurrentItem] = useState(null);
 
   const items = [
@@ -24,9 +24,7 @@ export const Indicators = ({ countries, onCountrySelect, id }) => {
   ];
 
   if (id != null && (currentItem == null || (currentItem != null && id != currentItem.id))) {
-    var country = countries.find((country) => id == country.id);
-
-    setCurrentItem(country);
+    setCurrentItem(countries.find((country) => id == country.id));
   }
 
   return (
@@ -40,7 +38,7 @@ export const Indicators = ({ countries, onCountrySelect, id }) => {
         itemToString={(item) => (item ? item.name : "")}
         onChange={({ selectedItem }) => {
           setCurrentItem(selectedItem);
-          onCountrySelect(selectedItem);
+          onSelectCountry(selectedItem);
         }}
         selectedItem={currentItem}
       />

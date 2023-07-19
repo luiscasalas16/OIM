@@ -20,22 +20,21 @@ function App() {
 
   const [currentCountry, setCurrentCountry] = useState(null);
 
-  const onMapCountrySelect = (id) => {
-    var country = countries.find((country) => id == country.id);
-    setCurrentCountry(country);
+  const onMapSelectCountry = (id) => {
+    setCurrentCountry(countries.find((country) => id == country.id));
   };
 
-  const onIndicatorsCountrySelect = (country) => {
+  const onIndicatorsSelectCountry = (country) => {
     setCurrentCountry(country);
   };
 
   return (
     <Grid className="mainGrid">
       <Column lg={3} md={2} sm={4}>
-        <Indicators countries={countries} id={currentCountry?.id ?? null} onCountrySelect={onIndicatorsCountrySelect}></Indicators>
+        <Indicators countries={countries} id={currentCountry?.id ?? null} onSelectCountry={onIndicatorsSelectCountry}></Indicators>
       </Column>
       <Column lg={9} md={6} sm={4}>
-        <Map countries={countries} id={currentCountry?.id ?? null} onCountrySelect={onMapCountrySelect}></Map>
+        <Map countries={countries} id={currentCountry?.id ?? null} onSelectCountry={onMapSelectCountry}></Map>
       </Column>
       <Column lg={4} md={8} sm={4}>
         <Practices {...currentCountry}></Practices>
