@@ -19,7 +19,7 @@ export const Map = ({ countries, onSelectCountry, id }) => {
   const [zoom, setZoom] = useState(2.5);
   const [center, setCenter] = useState([-95, 35]);
 
-  const [content, setContent] = useState("hola mundo");
+  const [content, setContent] = useState("");
 
   if (countries.length > 0 && countriesIds.current == null) {
     //genera un conjunto que contiene el id de los paises disponibles.
@@ -49,6 +49,9 @@ export const Map = ({ countries, onSelectCountry, id }) => {
   }
 
   const handleClick = (geography, projection, path) => () => {
+    //evita funcionalidad de países deshabilitados
+    if (!countriesIds.current || !countriesIds.current.has(geography.id)) return;
+
     selectCountry(geography, projection, path);
 
     onSelectCountry(geography.id);
@@ -59,7 +62,7 @@ export const Map = ({ countries, onSelectCountry, id }) => {
       <div data-tip="">
         <ComposableMap>
           <ZoomableGroup center={center} zoom={zoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
-            <Graticule stroke={colors.graticule} strokeWidth={0.4} />
+            {/* <Graticule stroke={colors.graticule} strokeWidth={0.4} /> */}
             <Geographies geography={mapTopoData}>
               {({ geographies, projection, path }) => {
                 if (mapIdToGeography.current == null) {
@@ -83,12 +86,15 @@ export const Map = ({ countries, onSelectCountry, id }) => {
                         fill:
                           geography.rsmKey == currentRsmKey
                             ? colors.countryActual
-                            : countriesIds.current && countriesIds.current.has(geography.id)
+                            : //evita funcionalidad de países deshabilitados
+                            countriesIds.current && countriesIds.current.has(geography.id)
                             ? colors.countryFillEnable
                             : colors.countryFillDisable,
                       },
                       hover: {
-                        fill: colors.countryHover,
+                        fill:
+                          //evita funcionalidad de países deshabilitados
+                          countriesIds.current && countriesIds.current.has(geography.id) ? colors.countryHover : colors.countryFillDisable,
                       },
                       pressed: {
                         fill: colors.countryPress,
@@ -98,7 +104,12 @@ export const Map = ({ countries, onSelectCountry, id }) => {
                     strokeWidth={0.2}
                     onClick={handleClick(geography, projection, path)}
                     onMouseEnter={() => {
-                      setContent(`${geography.properties.name}`);
+                      //evita funcionalidad de países deshabilitados
+                      if (countriesIds.current && countriesIds.current.has(geography.id)) {
+                        setContent(geography.properties.name);
+                      } else {
+                        setContent("");
+                      }
                     }}
                     onMouseLeave={() => {
                       setContent("");

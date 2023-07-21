@@ -6,10 +6,6 @@ export const Indicators = ({ countries, onSelectCountry, id }) => {
 
   const items = [
     {
-      id: "option-0",
-      text: "Option 0",
-    },
-    {
       id: "option-1",
       text: "Option 1",
     },
@@ -28,8 +24,8 @@ export const Indicators = ({ countries, onSelectCountry, id }) => {
   }
 
   return (
-    <>
-      <p className="textCuerpoTextoGrande">Panel de indicadores</p>
+    <div className="panel">
+      <p className="textSubheading">Panel de indicadores</p>
       <Dropdown
         id="selectCountry"
         label="Seleccione una opción"
@@ -55,6 +51,6 @@ export const Indicators = ({ countries, onSelectCountry, id }) => {
         <RadioButton id="radio-2" labelText="No" value="no" />
         <RadioButton id="radio-3" labelText="Todos" value="todos" />
       </RadioButtonGroup>
-    </>
+    </div>
   );
 };

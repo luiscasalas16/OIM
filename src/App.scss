@@ -2,61 +2,34 @@
 
 //text
 
-.textSubheading {
-  color: #000;
-
+.textHeading {
   /* Sub-heading/sub heading */
-  font-family: IBM Plex Sans;
+  font-size: 42px;
+}
+
+.textSubheading {
+  /* Sub-heading/sub heading */
   font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 28px;
 }
 
 .textCuerpoTextoGrande {
-  color: #000;
-
   /* Cuerpo de texto/cuerpo de texto grande */
-  font-family: IBM Plex Sans;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 30px;
 }
 
 .textCuerpoTextoMedio {
-  color: var(--text-text-primary, #161616);
-
   /* Cuerpo de texto/cuerpo de texto medio */
-  font-family: IBM Plex Sans;
   font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
 }
 
 .textCuerpoTextoPequeño {
-  color: #000;
-
   /* Cuerpo de texto/cuerpo de texto pequeño */
-  font-family: IBM Plex Sans;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 18px;
-  letter-spacing: 0.16px;
 }
 
 .textAyuda {
-  color: var(--text-text-primary, #161616);
-
   /* Otros estilos/texto ayuda 1 */
-  font-family: IBM Plex Sans;
   font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0.32px;
 }
 
 //spacing
@@ -96,9 +69,28 @@
 
 //specific
 
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+}
+
 .mainGrid {
   width: 100vw;
   height: 100vh;
+}
+
+.panel {
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+.titulo {
+  padding-top: 15px;
+  padding-bottom: 25px;
 }
 
 .practica {
@@ -107,10 +99,12 @@
   padding: 8px;
 }
 
+//elimina el cuadro de selección del país en el mapa.
 .rsm-geographies path:focus {
   outline: none;
 }
 
+//corrige un problema de visualización del tooltip en el mapa.
 .__react_component_tooltip.place-top::before {
   z-index: -2 !important;
 }

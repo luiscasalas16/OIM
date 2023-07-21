@@ -3,14 +3,13 @@ import { Download } from "@carbon/react/icons";
 
 export const Practices = ({ name, population, capital }) => {
   return (
-    <>
+    <div className="panel">
       <p className="textCuerpoTextoGrande spacing-06">{name ?? "N/A"}</p>
       <p className="textCuerpoTextoPequeño spacing-05">
-        Lorem ipsum dolor sit lorem a amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam.
+        Lorem ipsum dolor sit lorem a amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       </p>
       <p className="textCuerpoTextoPequeño spacing-07">
-        <strong>Población:</strong> {population ?? "N/A"}
+        <strong>Población:</strong> {population?.toLocaleString() ?? "N/A"}
         <br />
         <strong>Capital:</strong> {capital ?? "N/A"}
       </p>
@@ -51,6 +50,6 @@ export const Practices = ({ name, population, capital }) => {
           </Column>
         </Grid>
       </div>
-    </>
+    </div>
   );
 };
