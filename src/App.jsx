@@ -4,20 +4,10 @@ import { Grid, Column, Tabs, TabList, Tab, TabPanels, TabPanel } from "@carbon/r
 
 import { Indicators, Map, Practices } from "./components";
 
-import { getCountries } from "./helpers/countries";
+import countriesData from "./helpers/countries";
 
 function App() {
-  const [countries, setCountries] = useState([]);
-
-  const initCountries = async () => {
-    const t = await getCountries();
-    setCountries(t);
-  };
-
-  useEffect(() => {
-    initCountries();
-  }, []);
-
+  const [countries] = useState(countriesData);
   const [currentCountry, setCurrentCountry] = useState(null);
 
   const onMapSelectCountry = (id) => {

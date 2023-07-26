@@ -1,26 +1,15 @@
 import { useState } from "react";
+
 import { Dropdown, RadioButtonGroup, RadioButton } from "@carbon/react";
 
+import options from "../helpers/options";
+
 export const Indicators = ({ countries, onSelectCountry, id }) => {
-  const [currentItem, setCurrentItem] = useState(null);
+  const [currentCountry, setCurrentCountry] = useState(null);
 
-  const items = [
-    {
-      id: "option-1",
-      text: "Option 1",
-    },
-    {
-      id: "option-2",
-      text: "Option 2",
-    },
-    {
-      id: "option-3",
-      text: "Option 3",
-    },
-  ];
-
-  if (id != null && (currentItem == null || (currentItem != null && id != currentItem.id))) {
-    setCurrentItem(countries.find((country) => id == country.id));
+  //si se cambia el elemento en el mapa y es diferente del elemento actual, se actualiza el elemento actual.
+  if (id != null && (currentCountry == null || (currentCountry != null && id != currentCountry.id))) {
+    setCurrentCountry(countries.find((country) => id == country.id));
   }
 
   return (
@@ -33,17 +22,19 @@ export const Indicators = ({ countries, onSelectCountry, id }) => {
         items={countries}
         itemToString={(item) => (item ? item.name : "")}
         onChange={({ selectedItem }) => {
-          setCurrentItem(selectedItem);
+          //se cambia el elemento actual.
+          setCurrentCountry(selectedItem);
+          //se lanza del evento de cambio de país.
           onSelectCountry(selectedItem);
         }}
-        selectedItem={currentItem}
+        selectedItem={currentCountry}
       />
-      <Dropdown id="selectScope" label="Seleccione una opción" titleText="Ámbito geográfico" items={items} itemToString={(item) => (item ? item.text : "")} />
+      <Dropdown id="selectScope" label="Seleccione una opción" titleText="Ámbito geográfico" items={options} itemToString={(item) => (item ? item.text : "")} />
       <Dropdown
         id="selectOrganization"
         label="Seleccione una opción"
         titleText="Organización impulsora"
-        items={items}
+        items={options}
         itemToString={(item) => (item ? item.text : "")}
       />
       <RadioButtonGroup name="vigente" legendText="Vigente" valueSelected="todos">

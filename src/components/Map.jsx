@@ -4,8 +4,7 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup, Graticule } from 
 import ReactTooltip from "react-tooltip";
 
 import colors from "../helpers/colors";
-
-import mapTopoData from "../assets/maps/countries-50m.json";
+import mapData from "../maps/countries-50m.json";
 
 export const Map = ({ countries, onSelectCountry, id }) => {
   const countriesIds = useRef(null);
@@ -14,12 +13,13 @@ export const Map = ({ countries, onSelectCountry, id }) => {
   const mapProjection = useRef(null);
   const mapPath = useRef(null);
 
-  const [currentId, setCurrentId] = useState(id);
-  const [currentRsmKey, setCurrentRsmKey] = useState("");
-  const [zoom, setZoom] = useState(2.5);
-  const [center, setCenter] = useState([-95, 35]);
+  const [currentCountryId, setCurrentCountryId] = useState(id);
+  const [currentCountryRsmKey, setCurrentCountryRsmKey] = useState("");
 
-  const [content, setContent] = useState("");
+  const [mapZoom, setMapZoom] = useState(2.5);
+  const [mapCenter, setMapCenter] = useState([-95, 35]);
+
+  const [tooltip, setTooltip] = useState("");
 
   if (countries.length > 0 && countriesIds.current == null) {
     //genera un conjunto que contiene el id de los paises disponibles.
@@ -31,29 +31,31 @@ export const Map = ({ countries, onSelectCountry, id }) => {
   }
 
   const selectCountry = (geography, projection, path) => {
-    setCurrentId(geography.id);
-    setCurrentRsmKey(geography.rsmKey);
+    setCurrentCountryId(geography.id);
+    setCurrentCountryRsmKey(geography.rsmKey);
 
+    // realiza el zoom del país en el mapa.
     const centroid = projection.invert(path.centroid(geography));
-    setCenter(centroid);
-    setZoom(5);
+    setMapCenter(centroid);
+    setMapZoom(5);
   };
 
-  if (id != null && id != currentId) {
+  //si se cambia el elemento en los indicadores y es diferente del elemento actual, se actualiza el elemento actual.
+  if (id != null && id != currentCountryId) {
     selectCountry(mapIdToGeography.current[id], mapProjection.current, mapPath.current);
   }
 
   function handleMoveEnd(position) {
-    setZoom(position.zoom);
-    setCenter(position.coordinates);
+    setMapZoom(position.zoom);
+    setMapCenter(position.coordinates);
   }
 
   const handleClick = (geography, projection, path) => () => {
-    //evita funcionalidad de países deshabilitados
+    //evita funcionalidad de países deshabilitados.
     if (!countriesIds.current || !countriesIds.current.has(geography.id)) return;
-
+    //se cambia el elemento actual.
     selectCountry(geography, projection, path);
-
+    //se lanza del evento de cambio de país.
     onSelectCountry(geography.id);
   };
 
@@ -61,9 +63,9 @@ export const Map = ({ countries, onSelectCountry, id }) => {
     <>
       <div data-tip="">
         <ComposableMap>
-          <ZoomableGroup center={center} zoom={zoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
+          <ZoomableGroup center={mapCenter} zoom={mapZoom} maxZoom={8} minZoom={2} onMoveEnd={handleMoveEnd}>
             {/* <Graticule stroke={colors.graticule} strokeWidth={0.4} /> */}
-            <Geographies geography={mapTopoData}>
+            <Geographies geography={mapData}>
               {({ geographies, projection, path }) => {
                 if (mapIdToGeography.current == null) {
                   //genera un objeto que mapea el id con el rsmKey de un pais, ya que sólo el Map conoce el rsmKey y el Indicators conoce el id del pais.
@@ -73,7 +75,7 @@ export const Map = ({ countries, onSelectCountry, id }) => {
                   }
                   mapIdToGeography.current = t2;
                 }
-                // almacena referencias necesarias para hacer el zoom
+                // almacena referencias necesarias para hacer el zoom.
                 mapProjection.current = projection;
                 mapPath.current = path;
 
@@ -84,16 +86,16 @@ export const Map = ({ countries, onSelectCountry, id }) => {
                     style={{
                       default: {
                         fill:
-                          geography.rsmKey == currentRsmKey
+                          geography.rsmKey == currentCountryRsmKey
                             ? colors.countryActual
-                            : //evita funcionalidad de países deshabilitados
+                            : //evita funcionalidad de países deshabilitados.
                             countriesIds.current && countriesIds.current.has(geography.id)
                             ? colors.countryFillEnable
                             : colors.countryFillDisable,
                       },
                       hover: {
                         fill:
-                          //evita funcionalidad de países deshabilitados
+                          //evita funcionalidad de países deshabilitados.
                           countriesIds.current && countriesIds.current.has(geography.id) ? colors.countryHover : colors.countryFillDisable,
                       },
                       pressed: {
@@ -104,15 +106,18 @@ export const Map = ({ countries, onSelectCountry, id }) => {
                     strokeWidth={0.2}
                     onClick={handleClick(geography, projection, path)}
                     onMouseEnter={() => {
-                      //evita funcionalidad de países deshabilitados
+                      //evita funcionalidad de países deshabilitados.
                       if (countriesIds.current && countriesIds.current.has(geography.id)) {
-                        setContent(geography.properties.name);
+                        //muestra el tooltip sobre el país en el mapa.
+                        setTooltip(geography.properties.name);
                       } else {
-                        setContent("");
+                        //oculta el tooltip.
+                        setTooltip("");
                       }
                     }}
                     onMouseLeave={() => {
-                      setContent("");
+                      //oculta el tooltip.
+                      setTooltip("");
                     }}
                   />
                 ));
@@ -121,7 +126,7 @@ export const Map = ({ countries, onSelectCountry, id }) => {
           </ZoomableGroup>
         </ComposableMap>
       </div>
-      <ReactTooltip>{content}</ReactTooltip>
+      <ReactTooltip>{tooltip}</ReactTooltip>
     </>
   );
 };
